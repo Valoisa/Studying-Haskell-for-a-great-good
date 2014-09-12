@@ -117,16 +117,19 @@ my_sequence = iterate regul 1
 alphabet :: [Char]
 alphabet = ['a' .. 'z']	
 
+--f :: Int -> Int -> String
+--f n m = 
+
 -- 5) Список строк, представляющих n-значные двоичные числа.
-binary_numbers :: Int -> [[Char]]
-binary_numbers n = iterate inc_bin_num (zeros n)
+binary_numbers :: Int -> [String]
+binary_numbers n =  iterate inc_bin_num (zeros n)
 	where
 		zeros n
-			| n > 1		= 0 : zeros (n-1)
-			| n == 1	= 0
+			| n > 1		= '0' : zeros (n-1)
+			| n == 1	= ['0']
 		inc_bin_num xs
-			| (last xs) == 0	= (init xs) : 1
-			| (last xs) == 1	= (inc_bin_num (init xs)) : 0
+			| (last xs) == '0'	= (init xs) ++ ['1']
+			| (last xs) == '1'	= (inc_bin_num (init xs)) ++ ['0']
 
 -- 3. Группировка списков.
 -- 1) Дан список символов. Сгруппировать подряд идущие символы по принципу:
@@ -134,10 +137,15 @@ binary_numbers n = iterate inc_bin_num (zeros n)
 group_numbers :: [Char] -> [[Char]]
 group_numbers xs = groupBy num_or_not xs -- Беда!
 	where
-		num_or_not x y
-			| ('0' <= x && x <= '9') && ('0' <= y && y <= '9') 	= True 
-			| ('0' > x && x > '9') && ('0' > y && y > '9')		= True
-			| otherwise 										= False
+		num_or_not x y = 
+			('0' <= x && x <= '9') && ('0' <= y && y <= '9') ||
+			(x < '0' && '9' < x) && (y < '0' && '9' < y)
+
+{-
+		num_or_not x y = isDigit x && isDigit y ||
+		 not (isDigit x) && not (isDigit y)
+
+-}
 
 -- 2) Дан список пар вещественных чисел (координат точек на плоскости).
 -- Сгруппировать подряд идущие координаты точек, лежащие в одной
