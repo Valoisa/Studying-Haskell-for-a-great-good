@@ -1,2 +1,3 @@
-Learning-Haskell-for-a-great-good-
+Studying-Haskell-for-a-great-good-
 ==================================
+Awwww yeah.
