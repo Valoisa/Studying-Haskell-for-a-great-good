@@ -6,11 +6,11 @@ module MyLogic
 ) where 
 
 data Logic3 = T|F|U	deriving (Eq, Show)
+
 not3 :: Logic3 -> Logic3
 not3 T = U
 not3 U = F
 not3 F = T
-
 
 and3 :: Logic3 -> Logic3 -> Logic3
 T `and3` T = T
@@ -37,5 +37,4 @@ U `or3` F = U
 F `or3` T = T
 F `or3` U = U
 F `or3` F = F 
-
 
