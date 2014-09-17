@@ -6,35 +6,34 @@ module MyLogic
 ) where 	
 	data Logic3 = T|F|U	deriving (Eq, Show)
 	not3 :: Logic3 -> Logic3
-	not3 T = U
-	not3 U = F
-	not3 F = T
-		
+	not3 b
+		| b == T	= U
+		| b == U	= F
+		| b == F	= T		
 	
 	and3 :: Logic3 -> Logic3 -> Logic3
-		T `and3` T = T
-		T `and3` U = U
-		T `and3` F = F
+	and3 x y
+		| (x == T) && (y== T)	= T
+		| (x == T) && (y== U)	= U
+		| (x == T) && (y== F)	= F
 	
-		U 'and3' T = U
-		U 'and3' U = U
-		U 'and3' F = F
+		| (x == U) && (y == T)	= U
+		| (x == U) && (y == U)	= U
+		| (x == U) && (y == F)	= F
 	
-		F 'and3' T = F
-		F 'and3' U = F
-		F 'and3' U = F
+		| (x == F) && (y == T)	= F
+		| (x == F) && (y == T)	= F
+		| (x == F) && (y == T)	= F
 	
 	or3 :: Logic3 -> Logic3 -> Logic3
-		T 'or3' T = T
-		T 'or3' U = T
-		T 'or3' F = T
-		
-		U 'or3' T = T
-		U 'or3' U = U
-		U 'or3' F = U
-		
-		F 'or3' T = T
-		F 'or3' U = U
-		F 'or3' F = F 
+		| (x == T) || (y== T)	= T
+		| (x == T) || (y== U)	= T
+		| (x == T) || (y== F)	= T
 	
+		| (x == U) || (y == T)	= T
+		| (x == U) || (y == U)	= U
+		| (x == U) || (y == F)	= U
 	
+		| (x == F) || (y == T)	= T
+		| (x == F) || (y == T)	= U
+		| (x == F) || (y == T)	= F
