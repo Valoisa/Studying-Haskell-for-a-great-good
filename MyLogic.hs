@@ -23,7 +23,7 @@ U `and3` F = F
 
 F `and3` T = F
 F `and3` U = F
-F `and3` U = F
+F `and3` F = F
 
 or3 :: Logic3 -> Logic3 -> Logic3
 T `or3` T = T
