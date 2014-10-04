@@ -5,11 +5,11 @@ import Control.Exception.Base (assert)
 test1 = [
 	T `and3` T == T,
 	T `and3` U == U,
-	T `and3` F == F]
+	T `and3` F == F
 
-test4 = U `and3` T
-test5 = U `and3` U
-test6 = U `and3` F
+	U `and3` T == U,
+	U `and3` U == U,
+	U `and3` F == U]
 
 test7 = F `and3` T
 test8 = F `and3` U
