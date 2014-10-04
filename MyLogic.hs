@@ -21,4 +21,4 @@ or3 :: Logic3 -> Logic3 -> Logic3
 a `or3` b = max a b 
 
 no4th :: Logic3 -> Logic3
-no4th a = a `and3` (not3 a) `and3` (not3 (not3 a)) 	
+no4th a = a `and3` (not3 a) `and3` (not3 (not3 a))

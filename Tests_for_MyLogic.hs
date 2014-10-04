@@ -1,11 +1,15 @@
 import MyLogic
-test1 = T `and3` T
-test2 = T `and3` U
-test3 = T `and3` F
 
-test4 = U `and3` T
-test5 = U `and3` U
-test6 = U `and3` F
+import Control.Exception.Base (assert)
+
+test1 = [
+	T `and3` T == T,
+	T `and3` U == U,
+	T `and3` F == F
+
+	U `and3` T == U,
+	U `and3` U == U,
+	U `and3` F == U]
 
 test7 = F `and3` T
 test8 = F `and3` U
@@ -27,3 +31,6 @@ test19 = no4th T
 test20 = no4th U
 test21 = no4th F
 
+doTest = map (flip assert ()) test1
+
+main = print doTest
