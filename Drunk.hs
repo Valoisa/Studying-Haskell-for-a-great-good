@@ -28,15 +28,15 @@ move :: (Deck, Deck) -> (Deck, Deck)
 move (x:xs, y:ys) = move_plus (x:xs, y:ys) [] -- Почему не работает?
     where 
     move_plus (x:xs, y:ys) zs
-    |beats x y == True    = (xs ++ [y] ++ [x] ++ zs, ys)  
-    |beats y x == True    = (xs, ys ++ [x] ++ [y] ++ zs)
-    |otherwise            = move_plus (xs, ys) zs++[x]++[y]
+		|beats x y == True    = (xs ++ [y] ++ [x] ++ zs, ys)  
+		|beats y x == True    = (xs, ys ++ [x] ++ [y] ++ zs)
+		|otherwise            = move_plus (xs, ys) (zs ++ [x] ++ [y])
     
 num_of_moves :: (Deck, Deck) -> Int
-num_of_moves = undefined
-{- num_of_moves (xs, ys)
-    |pair == ([], ys)) || (pair == (xs, []))    = 1
-    |otherwise                                  = 1 + num_of_moves pair
-        where 
-        pair = move (xs, ys)
--}  
+--num_of_moves =
+num_of_moves p@(xs, ys)
+    | (move p == ([], ys)) || (move p == (xs, []))    = 1
+    | otherwise                                   = 1 + num_of_moves (move p)
+        --where 
+        --pair = move (xs, ys)
+
