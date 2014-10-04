@@ -31,12 +31,12 @@ move (x:xs, y:ys) = move_plus (x:xs, y:ys) [] -- Почему не работа�
     |beats x y == True    = (xs ++ [y] ++ [x] ++ zs, ys)  
     |beats y x == True    = (xs, ys ++ [x] ++ [y] ++ zs)
     |otherwise            = move_plus (xs, ys) zs++[x]++[y]
-	
+    
 num_of_moves :: (Deck, Deck) -> Int
 num_of_moves = undefined
 {- num_of_moves (xs, ys)
-	|pair == ([], ys)) || (pair == (xs, []))	= 1
-	|otherwise									= 1 + num_of_moves pair
-		where 
-		pair = move (xs, ys)
--}	
+    |pair == ([], ys)) || (pair == (xs, []))    = 1
+    |otherwise                                  = 1 + num_of_moves pair
+        where 
+        pair = move (xs, ys)
+-}  
