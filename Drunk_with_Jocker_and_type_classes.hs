@@ -56,7 +56,7 @@ instance Show Value where
 
 
 
-data Card = Card (Value, Suit) | Jocker -- deriving (Ord)
+data Card = Card (Value, Suit) | Jocker deriving (Eq)
 
 instance Ord Card where
 	Card (_, _) < Jocker		= True
@@ -72,7 +72,7 @@ instance Ord Card where
 	Card (J, _) < Card (Q, _)		= True
 	Card (Q, _) < Card (K, _)		= True
 	Card (K, _) < Card (A, _)		= True
--}
+
 type Deck = [Card]
 
 {-sameSuit :: Card -> Card -> Bool
