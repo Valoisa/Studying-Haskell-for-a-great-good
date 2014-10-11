@@ -7,7 +7,22 @@ module MyLogic
 )
 where
 
-data Logic3 = F | U | T deriving (Eq, Show, Ord)
+data Logic3 = F | U | T
+
+instance Eq Logic3 where
+	F == F = True
+	U == U = True
+	T == T = True
+	_ == _ = False
+
+instance Show Logic3 where
+	show F = "False"
+	show U = "Unknown"
+	show T = "True" 
+
+instance Ord Logic3 where
+	F < U = True
+	U < T = True
 
 not3 :: Logic3 -> Logic3
 not3 T = U
