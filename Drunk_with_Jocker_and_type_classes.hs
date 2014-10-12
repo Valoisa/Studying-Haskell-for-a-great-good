@@ -56,7 +56,7 @@ instance Show Value where
 
 
 
-data Card = Card (Value, Suit) | Jocker -- deriving (Ord)
+data Card = Card (Value, Suit) | Jocker deriving (Eq)
 
 instance Ord Card where
 	Card (_, _) < Jocker		= True
@@ -72,17 +72,17 @@ instance Ord Card where
 	Card (J, _) < Card (Q, _)		= True
 	Card (Q, _) < Card (K, _)		= True
 	Card (K, _) < Card (A, _)		= True
--}
+
 type Deck = [Card]
 
-{-sameSuit :: Card -> Card -> Bool
-sameSuit Card (_, _) Jocker = False
-sameSuit Card (a, b) Card (x, y) = (b == y)
+sameSuit :: Card -> Card -> Bool
+sameSuit (Card (_, _)) Jocker = False
+sameSuit (Card (a, b)) (Card (x, y)) = (b == y)
 
 beats :: Card -> Card -> Bool
-beats Jocker Card (_, _) 		= False
-beats Card (_, _) Jocker		= False
-beats Card (a, b) Card (x, y)	= (a > x)
+beats Jocker (Card (_, _)) 		= False
+beats (Card (_, _)) Jocker		= False
+beats (Card (a, b)) (Card (x, y))	= (a > x)
 
 move :: (Deck, Deck) -> (Deck, Deck)
 move (x:xs, y:ys) = move_plus (x:xs, y:ys) [] 
@@ -98,4 +98,4 @@ num_of_moves p@(xs, ys)
     | (move p == ([], ys)) || (move p == (xs, []))    = 1
     | otherwise                                   = 1 + num_of_moves (move p)
         --where 
-        --pair = move (xs, ys)-}
+        --pair = move (xs, ys)
