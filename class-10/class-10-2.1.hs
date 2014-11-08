@@ -22,8 +22,8 @@ reduce a
 	reduceNF :: Functor f => Int -> f a -> f a
 -}
 
---reduceNF :: Functor f => Int -> f a -> f b
---reduceNF n f a =  last $ take n $ iterate (fmap reduce) (f a)
+reduceNF :: (Functor f, Integral a) => Int -> f a -> f a
+reduceNF n c1 =  last $ take n $ iterate (fmap reduce) c1
 	
 {-	
 	Дан текстовый файл, содержащий пары положительных целых чисел в каждой 
@@ -39,6 +39,7 @@ reduce a
 -}
 
 makePairs :: (Integral a) => [a] -> [(a, a)]
+--makePairs :: [Int] -> [(Int, Int)]
 makePairs [] = []
 makePairs (x:y:xs) = (x, y) : makePairs xs
 
