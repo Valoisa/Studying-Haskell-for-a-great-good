@@ -17,5 +17,5 @@ main = do
 	content <- fmap (totalLength . lines) $ readFile "strings.txt"
 	--a <- fmap totalLength $ lines content  
         -- hClose handle
-	putStrLn $ "Total Length of the entered Strings: " ++ show content -- a = 0 
+	putStrLn $ "Total Length of the entered Strings: " ++ show a -- a = 0 
 	

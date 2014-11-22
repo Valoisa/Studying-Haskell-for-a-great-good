@@ -43,7 +43,7 @@ makePairs :: (Integral a) => [a] -> [(a, a)]
 makePairs [] = []
 makePairs (x:y:xs) = (x, y) : makePairs xs
 
-readTuples :: (Integral a) => String -> [(a, a)]
+readTuples :: String -> IO [(Int, Int)]
 readTuples name = do
 	conents <- readFile name
 	return $ makePairs $ map read $ words conents
@@ -51,11 +51,23 @@ readTuples name = do
 unpair :: (Integral a) => [(a, a)] -> [a]
 unpair xs = foldl (\acc (x, y) -> acc ++ [x] ++ [y]) [] xs
 
+doAll = do
+	prs <- readTuples "abc.txt"
+	print $ pairlist2maybe prs 
+	
 pairlist2maybe :: (Integral a) => [(a, a)] -> [Maybe (a, a)]
-pairlist2maybe xs = foldl (\acc (x, y) -> if x /= 0 && y /= 0 then acc ++ [Just (x, y)] else acc ++ [Nothing]) [] xs
+pairlist2maybe xs = foldl 
+	(\acc (x, y) -> 
+		if x /= 0 && y /= 0 
+			then acc ++ [Just (x, y)] 
+			else acc ++ [Nothing]) [] xs
 
---pairlist2either :: (Integral a) => [(a, a)] -> [Either a a]
---pairlist2either xs = foldl (\acc (x, y) -> if x /= 0 && y /= 0 then acc ++ [Left (x, y)] else acc ++ [Right (x, y)]) [] xs
+pairlist2either :: (Integral a) => [(a, a)] -> [Either a a]
+pairlist2either xs = foldl 
+	(\acc (x, y) -> 
+		if x /= 0 && y /= 0 
+			then Left  x : acc
+			else Right y : acc) [] xs
 
 pairlist2IO :: (Integral a) => [(a, a)] -> IO [(a, a)]
 pairlist2IO xs = undefined
