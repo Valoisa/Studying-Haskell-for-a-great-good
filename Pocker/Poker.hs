@@ -75,19 +75,19 @@ isThreeOfAKind xs = elem 3 $ map length $ groupAlike valList
 getHighCard :: [Card] -> Card
 getHighCard xs = last xs
 
-{-
+
 --Функции для проверки на выигрыш
 identHand :: [Card] -> Hand
 identHand xs 
-	| isRoyalFlush xs		= (RoyalFlush, [Card])
-	| isStraightFlush xs	= (StraightFlush, [Card])
-	| isStraight xs			= (Straight, [Card])
-	| isFourOfAKind xs		= (FourOfAKind, [Card])
-	| isFullHouse xs		= (FullHouse, [Card])
-	| isThreeOfAKind xs		= (ThreeOfAKind, [Card])
-	| isTwoPairs xs 		= (TwoPairs, [Card])
-	| isOnePair xs 			= (OnePair, [Card])
-	| otherwise 			= (HighCard, [Card])
+	| isRoyalFlush xs		= (RoyalFlush, xs)
+	| isStraightFlush xs	= (StraightFlush, xs)
+	| isStraight xs			= (Straight, xs)
+	| isFourOfAKind xs		= (FourOfAKind, xs)
+	| isFullHouse xs		= (FullHouse, xs)
+	| isThreeOfAKind xs		= (ThreeOfAKind, xs)
+	| isTwoPairs xs 		= (TwoPairs, xs)
+	| isOnePair xs 			= (OnePair, xs)
+	| otherwise 			= (HighCard, xs)
 
 compareAlikeHand :: Hand -> Hand -> Bool
 compareAlikeHand (a1, xs) (a2, ys)
@@ -109,4 +109,4 @@ compareHand (a1, xs) (a2, ys)
 	| a1 > a2 									= True
 	| (a1 == RoyalFlush) && (a2 == RoyalFlush) 	= False
 	| otherwise 								= 
-		compareAlikeHand (a1, xs) (a2, ys) -}
+		compareAlikeHand (a1, xs) (a2, ys)
