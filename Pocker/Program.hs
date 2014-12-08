@@ -28,4 +28,4 @@ decideTheWinner xs = map (compareHand . makeHand) xs
 
 main = do
 	count <- fmap words $ readFile "poker.txt"
-	putStrLn $ "The first player has won" ++ show (length $ last $ groupAlike $ sort $ decideTheWinner $ readCardList count) ++ "times"
+	putStrLn $ "The first player has won " ++ show (length $ last $ groupAlike $ sort $ decideTheWinner $ readCardList count) ++ " times"
