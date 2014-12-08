@@ -1,4 +1,5 @@
 import Poker
+import Data.List
 
 readCard :: String -> Card
 readCard xs = Card (readValue $ head xs) (readSuit $ last xs)
@@ -16,8 +17,15 @@ readCard xs = Card (readValue $ head xs) (readSuit $ last xs)
             | otherwise = (read::String -> Value) [a]
         readSuit b = (read::String -> Suit) [b]
 
-readCardList :: [String] -> [Card]
-readCardList xs = map readCard xs       
+readCardList :: [String] -> [([Card], [Card])]
+readCardList xs = makePairs $ makeTens $ map readCard xs
 
---main = do
---      list <- 
+makeHand :: ([Card], [Card]) -> (Hand, Hand)
+makeHand (a, b) = (identHand a, identHand b)
+
+decideTheWinner :: [([Card], [Card])] -> [Bool]
+decideTheWinner xs = map (compareHand . makeHand) xs    
+
+main = do
+	count <- fmap words $ readFile "poker.txt"
+	putStrLn $ "The first player has won" ++ show (length $ last $ groupAlike $ sort $ decideTheWinner $ readCardList count) ++ "times"
