@@ -3,7 +3,7 @@ import Data.List
 data Suit = C | D | H | S deriving (Show, Read, Eq)
 
 data Value = C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | C10 | J | Q | K | A 
-	deriving (Ord, Eq, Read, Show)
+	deriving (Ord, Eq, Read, Show, Enum)
 
 data Card = Card Value Suit deriving (Eq)
 instance Ord Card where                 -- в одну строчку!
@@ -30,51 +30,52 @@ groupAlike xs = groupBy (\x y -> x == y) xs
 
 -- Проверки на ту или иную ставку: 
 isFlush :: [Card] -> Bool
-isFlush xs = length (nub $ foldl (\Card a b acc -> b:acc) [] xs) == 1
+isFlush xs = length (nub $ foldl (\acc (Card a b) -> b : acc) [] xs) == 1
 
 isStraight:: [Card] -> Bool
-isStraight xs = valList == take 5 $ [a..]
+isStraight xs = valList ==((take 5) [h..])
 	where 
-		valList = foldl (\Card a b acc -> a:acc) [] xs
-		a = head valList
+		valList = foldl (\acc (Card a b) -> a : acc) [] xs
+		h = head valList
 
 isStraightFlush :: [Card] -> Bool
 isStraightFlush xs = (isFlush xs) && (isStraight xs)
  
 isRoyalFlush :: [Card] -> Bool
 isRoyalFlush xs = (isFlush xs) && 
-				(foldl (\Card a b acc -> a:acc) [] xs) == [C10 .. A]
+				(foldl (\acc (Card a b) -> a : acc) [] xs) == [C10 .. A]
 
 isFourOfAKind :: [Card] -> Bool
-isFourOfAKind xs = (take 4 valList) == take 4 (iterate (\x -> x) a) 
-					|| (drop 1 valList) == take 4 (iterate (\x -> x) a)
+isFourOfAKind xs = (take 4 valList) == take 4 (iterate (\x -> x) h) 
+					|| (drop 1 valList) == take 4 (iterate (\x -> x) h)
 	where 
-		valList = foldl (\Card a b acc -> a:acc) [] xs
-		a = head valList
+		valList = foldl (\acc (Card a b) -> a : acc) [] xs
+		h = head valList
 
 isFullHouse :: [Card] -> Bool
 isFullHouse xs = length (nub valList) == 2
 	where
-		valList = foldl (\Card a b acc -> a:acc) [] xs
+		valList = foldl (\acc (Card a b) -> a:acc) [] xs
 
 isOnePair :: [Card] -> Bool
 isOnePair xs = length (nub valList) == 4
 	where
-		valList = foldl (\Card a b acc -> a:acc) [] xs
+		valList = foldl (\acc (Card a b) -> a:acc) [] xs
 
 isTwoPairs :: [Card] -> Bool
 isTwoPairs xs = (sort $ nub $ map length $ groupAlike valList) == [1, 2, 2]
 	where
-		valList = foldl (\Card a b acc -> a:acc) [] xs
+		valList = foldl (\acc (Card a b) -> a:acc) [] xs
 
 isThreeOfAKind :: [Card] -> Bool
 isThreeOfAKind xs = elem 3 $ map length $ groupAlike valList
 	where
-		valList = foldl (\Card a b acc -> a:acc) [] xs
+		valList = foldl (\acc (Card a b) -> a : acc) [] xs
 
 getHighCard :: [Card] -> Card
 getHighCard xs = last xs
 
+{-
 --Функции для проверки на выигрыш
 identHand :: [Card] -> Hand
 identHand xs 
@@ -108,4 +109,4 @@ compareHand (a1, xs) (a2, ys)
 	| a1 > a2 									= True
 	| (a1 == RoyalFlush) && (a2 == RoyalFlush) 	= False
 	| otherwise 								= 
-		compareAlikeHand (a1, xs) (a2, ys)
+		compareAlikeHand (a1, xs) (a2, ys) -}
