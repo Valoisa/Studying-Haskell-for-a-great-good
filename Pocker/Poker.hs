@@ -1,4 +1,4 @@
-module Pocker where
+module Poker where
 import Data.List
 
 data Suit = C | D | H | S deriving (Show, Read, Eq)
