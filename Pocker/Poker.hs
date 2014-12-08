@@ -7,18 +7,7 @@ data Value = C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | C10 | J | Q | K | A
 
 data Card = Card Value Suit deriving (Eq)
 instance Ord Card where                 -- в одну строчку!
-	Card C2 _ < Card C3 _	= True
-	Card C3 _ < Card C4 _	= True
-	Card C4 _ < Card C5 _	= True
-	Card C5 _ < Card C6 _	= True
-	Card C6 _ < Card C7 _	= True
-	Card C7 _ < Card C8 _	= True
-	Card C8 _ < Card C9 _	= True
-	Card C9 _ < Card C10 _	= True
-	Card C10 _ < Card J _	= True
-	Card J _ < Card Q _		= True
-	Card Q _ < Card K _		= True
-	Card K _ < Card A _		= True
+	(Card a _) `compare`  (Card b _) = a `compare` b 
 
 
 data HandType = HighCard | OnePair | TwoPairs |
@@ -33,7 +22,7 @@ makeTens :: [a] -> [[a]]
 makeTens xs = map (take 10) 
 	$ takeWhile (\xs -> length xs > 0) $ iterate (drop 10) xs
 
-makePairs :: [[a]] -> [([a], [a])]
+makePairs :: (Ord a) => [[a]] -> [([a], [a])]
 makePairs ys = map (\xs -> (sort (take 5 xs), sort (drop 5 xs))) ys
 
 concaten :: (Eq a) => [a] -> [a] -> [a]
@@ -61,7 +50,7 @@ groupAlike [] = []
 groupAlike [x] = [[x]]
 groupAlike (x:xs) = fst (separate (x:xs)) : groupAlike (snd (separate (x:xs)))
 
--- Проверки на ту или иную ставку:
+-- Проверки на ту или иную ставку: 
 isFlush :: [Card] -> Bool
 isFlush xs = length (unique $ foldl (\Card a b acc -> b:acc) [] xs) == 1
 
