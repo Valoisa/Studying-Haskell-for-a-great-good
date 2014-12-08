@@ -104,8 +104,8 @@ identHand xs
 	| otherwise 			= (HighCard, xs)
 
 -- Если у игроков одинаковые ставки	
-compareAlikeHand :: Hand -> Hand -> Bool
-compareAlikeHand (a1, xs) (a2, ys)
+compareAlikeHand :: (Hand, Hand) -> Bool
+compareAlikeHand ((a1, xs), (a2, ys))
 	| (a1 == HighCard) || (a1 == Flush) 
 		|| (a1 == Straight) || (a1 == StraightFlush) 
 			= (getHighCard xs) > (getHighCard ys)
@@ -118,10 +118,10 @@ compareAlikeHand (a1, xs) (a2, ys)
 		getHigh' zs = maximum $ drop 3 $ concat 
 			$ sortBy (\p q -> compare (length p) (length q)) $ groupAlike zs
 			
-compareHand :: Hand -> Hand -> Bool
-compareHand (a1, xs) (a2, ys)
+compareHand :: (Hand, Hand) -> Bool
+compareHand ((a1, xs), (a2, ys))
 	| a1 < a2 									= False
 	| a1 > a2 									= True
 	| (a1 == RoyalFlush) && (a2 == RoyalFlush) 	= False
 	| otherwise 								= 
-		compareAlikeHand (a1, xs) (a2, ys)
+		compareAlikeHand ((a1, xs), (a2, ys))
