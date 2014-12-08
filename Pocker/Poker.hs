@@ -1,3 +1,4 @@
+module Pocker where
 import Data.List
 
 data Suit = C | D | H | S deriving (Show, Read, Eq)
