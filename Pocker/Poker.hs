@@ -25,34 +25,12 @@ makeTens xs = map (take 10)
 makePairs :: (Ord a) => [[a]] -> [([a], [a])]
 makePairs ys = map (\xs -> (sort (take 5 xs), sort (drop 5 xs))) ys
 
-concaten :: (Eq a) => [a] -> [a] -> [a]
-concaten xs ys = xs ++ ys                    -- убрать!!!
-
-separate :: (Eq a) => [a] -> ([a], [a])
-separate [] = ([], [])
-separate [x] = ([x], [])
-separate (x:y:xs) = (alike (x:y:xs), others (x:y:xs))
-	where
-		alike [x] = [x]
-		alike (x:y:xs)
-			| x == y	= x : alike (y:xs)	
-			| x /= y	= [x]
-		others [x] = []	
-		others (x:y:xs)
-			| x == y	= others (y:xs)
-			| x /= y	= (y:xs)
-
-unique :: (Eq a) => [a] -> [a]
-unique (x:xs) = head (fst (separate (x:xs))) : unique (snd (separate(x:xs)))
-
 groupAlike :: (Eq a) => [a] -> [[a]]
-groupAlike [] = []
-groupAlike [x] = [[x]]
-groupAlike (x:xs) = fst (separate (x:xs)) : groupAlike (snd (separate (x:xs)))
+groupAlike xs = groupBy (\x y -> x == y) xs
 
 -- Проверки на ту или иную ставку: 
 isFlush :: [Card] -> Bool
-isFlush xs = length (unique $ foldl (\Card a b acc -> b:acc) [] xs) == 1
+isFlush xs = length (nub $ foldl (\Card a b acc -> b:acc) [] xs) == 1
 
 isStraight:: [Card] -> Bool
 isStraight xs = valList == take 5 $ [a..]
@@ -75,17 +53,17 @@ isFourOfAKind xs = (take 4 valList) == take 4 (iterate (\x -> x) a)
 		a = head valList
 
 isFullHouse :: [Card] -> Bool
-isFullHouse xs = length (unique valList) == 2
+isFullHouse xs = length (nub valList) == 2
 	where
 		valList = foldl (\Card a b acc -> a:acc) [] xs
 
 isOnePair :: [Card] -> Bool
-isOnePair xs = length (unique valList) == 4
+isOnePair xs = length (nub valList) == 4
 	where
 		valList = foldl (\Card a b acc -> a:acc) [] xs
 
 isTwoPairs :: [Card] -> Bool
-isTwoPairs xs = (sort $ unique $ map length $ groupAlike valList) == [1, 2, 2]
+isTwoPairs xs = (sort $ nub $ map length $ groupAlike valList) == [1, 2, 2]
 	where
 		valList = foldl (\Card a b acc -> a:acc) [] xs
 
