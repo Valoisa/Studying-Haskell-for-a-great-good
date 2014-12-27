@@ -7,14 +7,14 @@ data Suit = C | D | H | S deriving (Show, Read, Eq)
 data Value = C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | C10 | J | Q | K | A 
 	deriving (Ord, Eq, Read, Show, Enum)
 
-data Card = Card Value Suit deriving (Eq)
+data Card = Card Value Suit deriving (Eq, Show)
 instance Ord Card where
 	(Card a _) `compare`  (Card b _) = a `compare` b 
 
 data HandType = HighCard | OnePair | TwoPairs |
 			ThreeOfAKind | Straight | Flush |
 			FullHouse | FourOfAKind | StraightFlush | RoyalFlush
-			deriving (Ord, Eq)
+			deriving (Ord, Eq, Show)
 
 type Hand = (HandType, [Card])
 
@@ -80,7 +80,7 @@ isOnePair xs = length (nub $ valList xs) == 4
 
 -- Две пары		
 isTwoPairs :: [Card] -> Bool
-isTwoPairs xs = (sort $ nub $ map length $ groupAlike $ valList xs) == [1, 2, 2]
+isTwoPairs xs = (sort $ map length $ groupAlike $ valList xs) == [1, 2, 2]
 
 
 -- Тройка		
@@ -88,11 +88,12 @@ isThreeOfAKind :: [Card] -> Bool
 isThreeOfAKind xs = elem 3 $ map length $ groupAlike $ valList xs
 
 
--- Возвращает старшую карту (поскольку ставки упорядочены, то она будет в конце)		
+-- Возвращает старшую карту (поскольку ставки упорядочены, то она будет
+-- в конце)		
 getHighCard :: [Card] -> Card
 getHighCard xs = last xs
 
---Функции для проверки на выигрыш
+{----Функции для проверки на выигрыш---}
 identHand :: [Card] -> Hand
 identHand xs 
 	| isRoyalFlush xs		= (RoyalFlush, xs)
