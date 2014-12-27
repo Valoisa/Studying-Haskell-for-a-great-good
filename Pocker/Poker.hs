@@ -29,7 +29,7 @@ makeTens xs = map (take 10)
 -- Превращает список десяток в список пар, 
 -- элементы которых - упорядоченные пятёрки	(ставки)
 makePairs :: (Ord a) => [[a]] -> [([a], [a])]
-makePairs ys = map (\xs -> (sort (take 5 xs), sort (drop 5 xs))) ys
+makePairs ys = map (\xs -> (take 5 xs, drop 5 xs)) ys
 				--(\cs -> let (f, s) = splitAt 5 cs in (sort f, sort s)) ys
 				-- ((fork identHand) . splitAt 5 cs) -- если sort делать в identHand
 				
@@ -66,7 +66,6 @@ isFourOfAKind :: [Card] -> Bool
 isFourOfAKind xs = take 4 (valList xs) == replicate 4 h
 					|| drop 1  (valList xs) == replicate 4 h'
 	where 
-		 -- factor put to global function
 		h = head $ valList xs
 		h' = last $ valList xs
 
@@ -88,37 +87,45 @@ isThreeOfAKind :: [Card] -> Bool
 isThreeOfAKind xs = elem 3 $ map length $ groupAlike $ valList xs
 
 
--- Возвращает старшую карту (поскольку ставки упорядочены, то она будет
--- в конце)		
+-- Возвращает старшую карту
 getHighCard :: [Card] -> Card
-getHighCard xs = last xs
+getHighCard xs = maximum xs
 
 {----Функции для проверки на выигрыш---}
 identHand :: [Card] -> Hand
 identHand xs 
-	| isRoyalFlush xs		= (RoyalFlush, xs)
-	| isStraightFlush xs	= (StraightFlush, xs)
-	| isStraight xs			= (Straight, xs)
-	| isFourOfAKind xs		= (FourOfAKind, xs)
-	| isFullHouse xs		= (FullHouse, xs)
-	| isThreeOfAKind xs		= (ThreeOfAKind, xs)
-	| isTwoPairs xs 		= (TwoPairs, xs)
-	| isOnePair xs 			= (OnePair, xs)
-	| otherwise 			= (HighCard, xs)
+	| isRoyalFlush $ sort xs		= (RoyalFlush, sort xs)
+	| isStraightFlush $ sort xs		= (StraightFlush, sort xs)
+	| isFlush $ sort xs				= (Flush, sort xs)
+	| isStraight $ sort xs			= (Straight, sort xs)
+	| isFourOfAKind $ sort xs		= (FourOfAKind, sort xs)
+	| isFullHouse $ sort xs			= (FullHouse, sort xs)
+	| isThreeOfAKind $ sort xs		= (ThreeOfAKind, sort xs)
+	| isTwoPairs $ sort xs 			= (TwoPairs, sort xs)
+	| isOnePair $ sort xs 			= (OnePair, sort xs)
+	| otherwise 					= (HighCard, sort xs)
 
 -- Если у игроков одинаковые ставки	
 compareAlikeHand :: (Hand, Hand) -> Bool
 compareAlikeHand ((a1, xs), (a2, ys))
 	| a1 `elem` [HighCard, Flush, Straight, StraightFlush] 
 			= (getHighCard xs) > (getHighCard ys)
-	| (a1 == OnePair) || (a1 == ThreeOfAKind) || (a1 == FullHouse) 
-		|| (a1 == FourOfAKind) = (getHigh xs) > (getHigh ys)
+	| a1 `elem` [OnePair, ThreeOfAKind, FourOfAKind]
+			= (getHigh xs) > (getHigh ys)
+	| a1 == FullHouse
+			= compareFullHouse xs ys
 	| otherwise  = (getHigh' xs) > (getHigh' ys)
 	where 
-		sortByLength = sortBy $ comparing length
-		getHigh zs = sortByLength (groupAlike zs) !! 1
+		sortByLength = sortBy (\a b -> length a `compare` length b)
+		getHigh zs =  head $ last $ sortByLength $ groupAlike zs
 		getHigh' zs = maximum $ drop 3 $ concat 
 			$ sortByLength $ groupAlike zs
+		compareFullHouse xs ys
+			| (getHigh xs) > (getHigh ys) 	= True
+			| (getHigh xs) < (getHigh ys) 	= False
+			| otherwise						= (getHighInPair xs) > (getHighInPair ys)
+				where
+					getHighInPair zs = head $ head $ sortByLength $ groupAlike zs
 			
 compareHand :: (Hand, Hand) -> Bool
 compareHand ((a1, xs), (a2, ys))
